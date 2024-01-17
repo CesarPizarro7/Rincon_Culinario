@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rincón Culinario - ${categoria}</title>
+  <link rel="shortcut icon" type="image/png" href="@{'/public/images/Icono.webp'}">
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #333333;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #5f7d95;
+        color: #ffffff;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        opacity: 1;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        z-index: 999;
+    }
+
+    header.hidden {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    #logo {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    #logo img {
+        height: 70px;
+        width: 70px;
+        margin-right: 10px;
+    }
+
+    #logo span {
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    #menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        margin-bottom: 10px;
+    }
+
+    #menu a {
+        color: #ffffff;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 24px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    #menu a:hover {
+        transform: scale(1.1);
+    }
+
+    #user-info {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        position: relative;
+    }
+
+    #user-info img {
+        height: 50px;
+        width: 50px;
+        margin-right: 10px;
+    }
+
+    #user-info span {
+        font-size: 20px;
+        font-weight: bold;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    #user-info::after {
+        content: "";
+        display: inline-block;
+        height: 50px;
+        width: 2px;
+        background-color: #ffffff;
+        margin: 0 10px;
+    }
+
+    #user-menu {
+        display: none;
+        position: absolute;
+        top: 115%;
+        left: 20px;
+        background-color: #cdeccd;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        white-space: nowrap;
+    }
+
+    #user-menu a {
+        display: block;
+        color: #333333;
+        text-decoration: none;
+        margin: 5px 0;
+        font-size: 16px;
+        transition: color 0.2s ease-in-out;
+    }
+
+    #user-menu a:hover {
+        color: #ff7777;
+    }
+
+    .search-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-wrapper input {
+        height: 30px;
+        padding: 5px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+    }
+
+    .search-wrapper button {
+        background-color: #ff7777;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .search-wrapper button:hover {
+        background-color: #993333;
+    }
+
+    #content {
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        margin: 120px auto 20px;
+        padding: 20px;
+        text-align: center;
+        width: 100%;
+        max-width: 55%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .receta {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .receta:hover {
+        transform: scale(1.1);
+    }
+
+    .receta-nombre {
+        font-size: 32px;
+        font-weight: bold;
+        margin-top: 40px;
+        text-align: center;
+        font-family: "Arial Black", sans-serif;
+        color: #333333;
+    }
+
+    .foto-receta {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .foto-receta img {
+        max-width: 100%;
+        max-height: 500px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+
+    .detalle {
+        text-align: center;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tiempo {
+        color: #888888;
+        margin-right: 10px;
+        margin-left: 5px;
+    }
+
+    .dificultad {
+        color: #888888;
+        margin-left: 10px;
+    }
+
+    .separador {
+        margin-top: 40px;
+        border: 0;
+        border-top: 1px solid #ccc;
+        width: 100%;
+    }
+
+    .valoracion {
+        margin-left: 20px;
+    }
+
+    .fixed-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #category-menu {
+        display: none;
+        position: absolute;
+        top: 150%;
+        left: 0;
+        min-width: 100%;
+        background-color: #cdeccd;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        white-space: nowrap;
+    }
+
+    #category-menu a {
+        display: block;
+        color: #333333;
+        text-decoration: none;
+        margin: 5px 0;
+        margin-left: 10px;
+        margin-right: 10px;
+        font-size: 16px;
+        transition: color 0.2s ease-in-out;
+    }
+
+    #category-menu a:hover {
+        color: #ff7777;
+        transform: scale(1.05);
+    }
+
+    #category-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    #category-button {
+        color: #ffffff;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 24px;
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    #category-button:hover {
+        transform: scale(1.1);
+    }
+
+    #quienes-somos {
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    #quienes-somos:hover {
+        transform: scale(1.1);
+    }
+
+    .autocomplete {
+      position: relative;
+      display: flex;
+      width: 100%;
+    }
+
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-top: none;
+      z-index: 99;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: #cdeccd;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      color: black;
+    }
+
+    .autocomplete-items div:hover {
+      background-color: #ffe6cc;
+    }
+
+    .autocomplete-active {
+      background-color: DodgerBlue !important;
+      color: #ffffff;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 40px;
+      border-radius: 10px;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .modal-buttons button {
+
+    }
+
+    .modal-content {
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+    }
+
+    .modal-message {
+      font-size: 20px;
+    }
+
+    .confirm-accept{
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      background-color: #4caf50;
+      color: #ffffff;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .confirm-accept:hover {
+      background-color: #265828;
+    }
+
+    .confirm-cancel{
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      background-color: #af504c;
+      color: #ffffff;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .confirm-cancel:hover {
+      background-color: #7B3835;
+    }
+
+    </style>
+  <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var prevScrollPos = window.pageYOffset || document.documentElement.scrollTop;
+            var header = document.querySelector('header');
+            var content = document.getElementById('content');
+
+            window.addEventListener('scroll', function() {
+                var currentScrollPos = window.pageYOffset || document.documentElement.scrollTop;
+
+                if (currentScrollPos > prevScrollPos) {
+                    header.classList.add('hidden');
+                } else {
+                    header.classList.remove('hidden');
+                }
+
+                prevScrollPos = currentScrollPos;
+            });
+
+            var headerHeight = header.offsetHeight;
+            content.style.marginTop = headerHeight + 5 + 'px';
+        });
+
+        document.addEventListener('click', function(event) {
+            var userMenu = document.getElementById("user-menu");
+            var target = event.target;
+            var userMenuVisible = userMenu.style.display === "block";
+
+            if (target.id !== "user-info" && !target.closest('#user-info') && userMenuVisible) {
+                userMenu.style.display = "none";
+            }
+
+            var categoryMenu = document.getElementById("category-menu");
+            var categoryButton = document.getElementById("category-button");
+            var categoryMenuVisible = categoryMenu.style.display === "block";
+
+            if (target.id !== "category-button" && !target.closest('#category-button') && !target.closest('#category-menu') && categoryMenuVisible) {
+                categoryMenu.style.display = "none";
+            }
+        });
+
+        function toggleUserMenu() {
+            var userMenu = document.getElementById("user-menu");
+            userMenu.style.display = (userMenu.style.display === "block") ? "none" : "block";
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        function enviarFormulario() {
+            var nombre = "${UserName}";
+
+            document.getElementById("nombreInput").value = nombre;
+            document.getElementById("sobreMiForm").submit();
+        }
+
+        function toggleCategoriasMenu() {
+            var categoryMenu = document.getElementById("category-menu");
+            categoryMenu.style.display = (categoryMenu.style.display === "block") ? "none" : "block";
+        }
+
+        function enviarRecetaForm(nombreReceta, userName) {
+            var listarecetas = [${listarecetas}];
+
+            if (listarecetas.includes(nombreReceta)) {
+                var form = document.createElement("form");
+                form.method = "POST";
+                form.action = "/RecetaForm";
+
+                var inputNombre = document.createElement("input");
+                inputNombre.type = "hidden";
+                inputNombre.name = "nombreReceta";
+                inputNombre.value = nombreReceta;
+                form.appendChild(inputNombre);
+
+                var inputUserName = document.createElement("input");
+                inputUserName.type = "hidden";
+                inputUserName.name = "nombreUsuario";
+                inputUserName.value = userName;
+                form.appendChild(inputUserName);
+
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                mostrarMensaje("El nombre de la receta no existe");
+            }
+        }
+
+        function enviarCategoriaForm(categoria, userName) {
+
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/RecetasPorCategoriaForm";
+
+            var inputCategoria = document.createElement("input");
+            inputCategoria.type = "hidden";
+            inputCategoria.name = "categoria";
+            inputCategoria.value = categoria;
+            form.appendChild(inputCategoria);
+
+            var inputUserName = document.createElement("input");
+            inputUserName.type = "hidden";
+            inputUserName.name = "nombreUsuario";
+            inputUserName.value = userName;
+            form.appendChild(inputUserName);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function enviarRecetasFacilesForm(userName) {
+
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/RecetasFacilesForm";
+
+            var inputUserName = document.createElement("input");
+            inputUserName.type = "hidden";
+            inputUserName.name = "nombreUsuario";
+            inputUserName.value = userName;
+            form.appendChild(inputUserName);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function enviarInicioForm(userName) {
+
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/IniciFormLogged";
+
+            var inputUserName = document.createElement("input");
+            inputUserName.type = "hidden";
+            inputUserName.name = "nombre";
+            inputUserName.value = userName;
+            form.appendChild(inputUserName);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function mostrarMensaje(mensaje) {
+          if (mensaje) {
+            var overlay = document.createElement('div');
+            overlay.classList.add('overlay');
+
+            var popup = document.createElement('div');
+            popup.classList.add('popup');
+
+            var heading = document.createElement('h2');
+            heading.textContent = mensaje;
+            popup.appendChild(heading);
+
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+
+            overlay.addEventListener('click', function() {
+              overlay.remove();
+            });
+          }
+        }
+
+        // Sugerencias de recetas
+
+        document.addEventListener("DOMContentLoaded", function() {
+          var recipes = [${listarecetas}];
+
+          function autocomplete(inp, arr) {
+            var currentFocus;
+
+            inp.addEventListener("input", function(e) {
+              var val = this.value;
+              closeAllLists();
+              if (!val) {
+                return false;
+              }
+              currentFocus = -1;
+
+              var a = document.createElement("DIV");
+              a.setAttribute("id", this.id + "autocomplete-list");
+              a.setAttribute("class", "autocomplete-items");
+              this.parentNode.appendChild(a);
+
+              for (var i = 0; i < arr.length; i++) {
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                  var b = document.createElement("DIV");
+                  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                  b.innerHTML += arr[i].substr(val.length);
+                  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                  b.addEventListener("click", function(e) {
+                    inp.value = this.getElementsByTagName("input")[0].value;
+                    closeAllLists();
+                  });
+                  a.appendChild(b);
+                }
+              }
+            });
+
+            inp.addEventListener("keydown", function(e) {
+              var x = document.getElementById(this.id + "autocomplete-list");
+              if (x) {
+                x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                  currentFocus++;
+                  addActive(x);
+                } else if (e.keyCode == 38) {
+                  currentFocus--;
+                  addActive(x);
+                } else if (e.keyCode == 13) {
+                  e.preventDefault();
+                  if (currentFocus > -1) {
+                    if (x) {
+                      x[currentFocus].click();
+                    }
+                  }
+                }
+              }
+            });
+
+            function addActive(x) {
+              if (!x) {
+                return false;
+              }
+              removeActive(x);
+              if (currentFocus >= x.length) {
+                currentFocus = 0;
+              }
+              if (currentFocus < 0) {
+                currentFocus = x.length - 1;
+              }
+              x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+              for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+              }
+            }
+
+            function closeAllLists() {
+              var x = document.getElementsByClassName("autocomplete-items");
+              for (var i = 0; i < x.length; i++) {
+                x[i].parentNode.removeChild(x[i]);
+              }
+            }
+
+            document.addEventListener("click", function(e) {
+              closeAllLists(e.target);
+            });
+          }
+
+          var input = document.getElementById("recipe-search");
+          autocomplete(input, recipes);
+        });
+
+        function confirmarDarseDeBaja(userName) {
+          var modal = document.getElementById("confirm-modal");
+          var mensaje = document.getElementById("confirm-message");
+          var botonAceptar = document.getElementById("confirm-accept");
+          var botonCancelar = document.getElementById("confirm-cancel");
+
+          mensaje.textContent = "¿Seguro que quieres darte de baja en la página? Se borrará tu cuenta y tus comentarios en las recetas.";
+          botonAceptar.onclick = function() {
+            BorrarUser(userName);
+            modal.style.display = "none";
+          };
+          botonCancelar.onclick = function() {
+            modal.style.display = "none";
+          };
+
+          modal.style.display = "block";
+        }
+
+        function BorrarUser(userName) {
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/delete";
+
+          var inputUserName = document.createElement("input");
+          inputUserName.type = "hidden";
+          inputUserName.name = "nombreUsuario";
+          inputUserName.value = userName;
+          form.appendChild(inputUserName);
+
+          document.body.appendChild(form);
+          form.submit();
+        }
+
+        function MejorValoradas(userName) {
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/MejorValoradas";
+
+          var inputUserName = document.createElement("input");
+          inputUserName.type = "hidden";
+          inputUserName.name = "nombreUsuario";
+          inputUserName.value = userName;
+          form.appendChild(inputUserName);
+
+          document.body.appendChild(form);
+          form.submit();
+        }
+
+    </script>
+</head>
+<body>
+<header>
+  <div id="logo">
+    <img src="@{'/public/images/Icono.webp'}" alt="Logo" style="height: 70px; width: 70px;">
+    <span style="font-size: 32px; font-weight: bold;">Rincón Culinario</span>
+  </div>
+  <div id="menu">
+    <a href="#" onclick="enviarInicioForm('${UserName}')">Inicio</a>
+    <div id="category-wrapper">
+      <div id="category-button" onclick="toggleCategoriasMenu()">Categorías</div>
+      <div id="category-menu" class="dropdown-menu">
+        #{list categoriasRecetas.entrySet(), as:'categoria'}
+        <div class="category-item">
+          <a href="#" onclick="enviarCategoriaForm('${categoria.key}', '${UserName}')">${categoria.key}</a>
+          <ul>
+            #{list categoria.value, as:'receta'}
+            <li><a href="#" onclick="enviarRecetaForm('${receta}', '${UserName}')">${receta}</a></li>
+            #{/list}
+          </ul>
+        </div>
+        #{/list}
+      </div>
+    </div>
+    <a href="#" onclick="enviarRecetasFacilesForm('${UserName}')">Recetas fáciles</a>
+    <form id="sobreMiForm" action="SobreMiLogged" method="post">
+      <input type="hidden" name="nombre" id="nombreInput">
+      <a href="#" onclick="enviarFormulario()" id="quienes-somos">¿Quiénes somos?</a>
+    </form>
+  </div>
+  <div class="search-wrapper">
+    <div id="user-info" onclick="toggleUserMenu()">
+      <img src="@{'/public/images/cocina.png'}" alt="Usuario" style="height: 50px; width: 50px;">
+      <span style="font-size: 20px; font-weight: bold;"> ${UserName} </span>
+      <div id="user-menu">
+        <div style="padding-bottom: 1px; font-size: 18px; color: #000000">Bienvenid@ ${UserName}</div>
+        <div style="border-bottom: 2px solid #ffffff; margin: 5px; margin-bottom: 10px"></div>
+        <a href="#" onclick="MejorValoradas('${UserName}');">Mejor Valoradas<img src="@{'/public/images/mejorValorado.png'}" alt="Calidad" style="margin-left: 10px; height: 22px; width: 22px;"></a>
+        <a href="#" onclick="confirmarDarseDeBaja('${UserName}');">Darse de Baja<img src="@{'/public/images/borrar-usuario.png'}" alt="Darse de Baja" style="margin-left: 25px; height: 22px; width: 22px;"></a>
+        <a href="/TancaSessio">Cerrar sesión<img src="@{'/public/images/cerrar-sesion.png'}" alt="Cerrar sesion" style="margin-left: 30px; height: 22px; width: 22px;"></a>
+      </div>
+    </div>
+    <div style="border-left: 1px solid #ffffff; margin: 0 10px;"></div>
+    <div class="autocomplete">
+      <input type="text" id="recipe-search" placeholder="Buscar receta por nombre">
+    </div>
+    <button id="search-button" onclick="enviarRecetaForm(document.getElementById('recipe-search').value, '${UserName}')">Buscar</button>
+  </div>
+</header>
+
+<div id="content">
+  #{list recetas, as:'receta'}
+  <div class="receta" onclick="enviarRecetaForm('${receta.nombre}', '${UserName}')" style="cursor: pointer;">
+    <div class="receta-nombre">${receta.nombre}</div>
+    <div class="foto-receta">
+      <img class="foto-receta" src="@{'/public/images/Recetas/' + receta.nombre + '.jpg'}" alt="Foto de la receta">
+    </div>
+    <div class="detalle">
+      <img src="@{'/public/images/temporizador.png'}" alt="Temporizador" style="height: 25px; width: 25px; margin-left: 10px;">
+      <span class="tiempo">${receta.tiempoestimado} min</span>
+      #{if receta.dificultad <= 2}
+      <img src="@{'/public/images/easy.png'}" alt="Easy" style="height: 60px; width: 70px; margin-left: 10px;">
+      #{/if}
+      #{if receta.dificultad < 4 && receta.dificultad > 2}
+      <img src="@{'/public/images/medium.png'}" alt="Medium" style="height: 60px; width: 70px; margin-left: 10px;">
+      #{/if}
+      #{if receta.dificultad >= 4}
+      <img src="@{'/public/images/hard.png'}" alt="Hard" style="height: 60px; width: 70px; margin-left: 10px;">
+      #{/if}
+      <span class="valoracion">${recetasConPuntuacionMedia.get(receta)} </span>
+      <img src="@{'/public/images/estrella.png'}" alt="Estrella" style="height: 20px; width: 20px; margin-left: 5px; margin-bottom: 2px;">
+    </div>
+    <hr class="separador">
+  </div>
+  #{/list}
+</div>
+
+<div id="confirm-modal" class="modal">
+  <div class="modal-content">
+    <div id="confirm-message" class="modal-message"></div>
+    <div class="modal-buttons">
+      <button id="confirm-accept" class="confirm-accept">Aceptar</button>
+      <button id="confirm-cancel" class="confirm-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
