@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rincón Culinario - Desarrollador</title>
+    <link rel="shortcut icon" type="image/png" href="@{'/public/images/Icono.webp'}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #5f7d95;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 1;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            z-index: 999;
+        }
+
+        header.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+
+        #logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        #logo img {
+            height: 70px;
+            width: 70px;
+            margin-right: 10px;
+        }
+
+        #logo span {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        #menu {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            margin-bottom: 10px;
+        }
+
+        #menu a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 24px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        #menu a:hover {
+            transform: scale(1.1);
+        }
+
+        #content {
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #content {
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin: 120px auto 20px;
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: max-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        h3 {
+            margin-top: 50px;
+        }
+
+
+        .developer-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .developer-info .developer-info-content {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
+        .developer-info img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .developer-info h1{
+            font-size: 32px;
+            font: Arial;
+            font-weight: bold;
+            margin: 10px;
+            margin-bottom: 20px;
+        }
+        .developer-info h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .developer-info p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        p {
+          font-size: 16px;
+          margin: 10px 0;
+        }
+
+        #map {
+          width: 800px;
+           height: 500px;
+           margin: 10px auto;
+           border-radius: 10px;
+           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #category-menu {
+            display: none;
+            position: absolute;
+            top: 150%;
+            left: 0;
+            min-width: 100%;
+            background-color: #cdeccd;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        #category-menu a {
+            display: block;
+            color: #333333;
+            text-decoration: none;
+            margin: 5px 0;
+            margin-left: 10px;
+            margin-right: 10px;
+            font-size: 16px;
+            transition: color 0.2s ease-in-out;
+        }
+
+        #category-menu a:hover {
+            color: #ff7777;
+            transform: scale(1.05);
+        }
+
+        #category-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        #category-button {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 24px;
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        #category-button:hover {
+            transform: scale(1.1);
+        }
+
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+
+        .popup {
+          background-color: #ffffff;
+          padding: 20px;
+          border-radius: 5px;
+          max-width: 400px;
+          text-align: center;
+        }
+
+        .button-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button-wrapper img {
+            margin: 0 10px;
+            height: 30px;
+        }
+
+        .button-wrapper span {
+            font-size: 14px;
+            color: #777777;
+        }
+
+        .login-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            background-color: transparent;
+            border-radius: 5px;
+            padding: 8px 16px;
+            transition: transform 0.2s ease-in-out;
+            border: none;
+        }
+
+        .register-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: transparent;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .register-button:hover,
+        .login-button:hover {
+            transform: scale(1.2);
+            background-color: #426783;
+        }
+
+        .login-button span,
+        .register-button span {
+            color: #ffffff;
+        }
+
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var prevScrollPos = window.pageYOffset || document.documentElement.scrollTop;
+            var header = document.querySelector('header');
+            var content = document.getElementById('content');
+
+            window.addEventListener('scroll', function() {
+                var currentScrollPos = window.pageYOffset || document.documentElement.scrollTop;
+
+                if (currentScrollPos > prevScrollPos) {
+                    header.classList.add('hidden');
+                } else {
+                    header.classList.remove('hidden');
+                }
+
+                prevScrollPos = currentScrollPos;
+            });
+
+            var headerHeight = header.offsetHeight;
+            content.style.marginTop = headerHeight + 5 + 'px';
+        });
+
+        document.addEventListener('click', function(event) {
+            var target = event.target;
+
+            var categoryMenu = document.getElementById("category-menu");
+            var categoryButton = document.getElementById("category-button");
+            var categoryMenuVisible = categoryMenu.style.display === "block";
+
+            if (target.id !== "category-button" && !target.closest('#category-button') && !target.closest('#category-menu') && categoryMenuVisible) {
+                categoryMenu.style.display = "none";
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        function mostrarMensajeError(mensaje) {
+          var overlay = document.createElement('div');
+          overlay.classList.add('overlay');
+
+          var popup = document.createElement('div');
+          popup.classList.add('popup');
+
+          var heading = document.createElement('h2');
+          heading.textContent = mensaje;
+          popup.appendChild(heading);
+
+          overlay.appendChild(popup);
+          document.body.appendChild(overlay);
+
+          overlay.addEventListener('click', function() {
+            overlay.remove();
+          });
+        }
+
+        function toggleCategoriasMenu() {
+            var categoryMenu = document.getElementById("category-menu");
+            categoryMenu.style.display = (categoryMenu.style.display === "block") ? "none" : "block";
+        }
+
+        function enviarCategoriaNotLoggedForm(categoria) {
+
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/RecetasPorCategoriaNotLoggedForm";
+
+            var inputCategoria = document.createElement("input");
+            inputCategoria.type = "hidden";
+            inputCategoria.name = "categoria";
+            inputCategoria.value = categoria;
+            form.appendChild(inputCategoria);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+<header>
+    <div id="logo">
+        <img src="@{'/public/images/Icono.webp'}" alt="Logo" style="height: 70px; width: 70px;">
+        <span style="font-size: 32px; font-weight: bold;">Rincón Culinario</span>
+    </div>
+    <div id="menu">
+        <a href="/Inici">Inicio</a>
+        <div id="category-wrapper">
+            <div id="category-button" onclick="toggleCategoriasMenu()">Categorías</div>
+            <div id="category-menu" class="dropdown-menu">
+                #{list categoriasRecetas.entrySet(), as:'categoria'}
+                <div class="category-item">
+                    <a href="#" onclick="enviarCategoriaNotLoggedForm('${categoria.key}')">${categoria.key}</a>
+                    <ul>
+                        #{list categoria.value, as:'receta'}
+                        <li><a href="#" onclick="mostrarMensajeError('Para ver el contenido de la receta: ${receta}, deberás estar registrado')">${receta}</a></li>
+                        #{/list}
+                    </ul>
+                </div>
+                #{/list}
+            </div>
+        </div>
+        <a href="/RecetasFacilesNotLoggedForm">Recetas fáciles</a>
+        <a href="#" onclick="scrollToTop()">¿Quiénes somos?</a>
+    </div>
+    <div class="button-wrapper">
+        <a href="/LoginForm" class="login-button">
+            <img src="@{'/public/images/Login.png'}" alt="Iniciar sesión" style="height: 50px; width: 50px;">
+            <span>Iniciar sesión</span>
+        </a>
+        <a href="/RegistreForm" class="register-button">
+            <img src="@{'/public/images/registrate.png'}" alt="Registrarse" style="height: 50px; width: 50px;">
+            <span>Registrarse</span>
+        </a>
+    </div>
+</header>
+
+<div id="content">
+    <div class="developer-info">
+        <h1><strong>Desarrolladores:</strong></h1>
+        <div class="developer-info-content">
+            <img src="public/images/mifoto.jpg" alt="Mi Foto">
+            <h2><strong>César Pizarro Hurtado</strong></h2>
+            <p>Soy César, un estudiante de Telecomunicaciones en la EETAC UPC de Tercero de carrera. He creado esta página como proyecto para la asignatura PES. A través de esta página quiero demostrar lo que he aprendido cursndo la asignatura, a la vez que creo algo útil para un usuario que quisiera aprender algunas recetas.</p>
+        </div>
+    </div>
+
+    <h3>¿Dónde puedes encontrarnos?</h3>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Crea un objeto de mapa con Leaflet y establece la ubicación inicial y el nivel de zoom
+        var map = L.map('map').setView([41.2755674, 1.9872505], 13.25);
+
+        // Crea una capa de mapa base utilizando OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+        // Crea un icono personalizado
+        var customIcon = L.icon({
+            iconUrl: 'public/images/eetac.png',
+            iconSize: [62, 32.67], // Tamaño del icono en píxeles
+            iconAnchor: [31, 32.67], // Punto de anclaje del icono (la parte inferior en este caso)
+            popupAnchor: [0, -32.67] // Punto de anclaje del popup (por encima del icono en este caso)
+        });
+
+        // Agrega un marcador en la ubicación de la EETAC con el icono personalizado
+        L.marker([41.2755674, 1.9872505], { icon: customIcon }).addTo(map)
+            .bindPopup('<a href="https://www.eetac.upc.edu/" target="_blank">EETAC UPC</a><br>Barcelona, España')
+            .openPopup();
+    </script>
+
+</div>
+
+</body>
+</html>
+
+

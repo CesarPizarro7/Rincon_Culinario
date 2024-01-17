@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rincón Culinario - Registro</title>
+  <link rel="shortcut icon" type="image/png" href="@{'/public/images/Icono.webp'}">
+  <style>
+        body {
+            background-color: #333333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #register {
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #ff0000;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            width: 100px;
+        }
+
+        .logo:hover {
+          transform: scale(1.1);
+        }
+
+        .field {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            border: 1px solid #dddddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #004466;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 12px 20px;
+            width: 100%;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #002233;
+        }
+
+        .separator {
+            margin: 20px 0;
+            height: 1px;
+            background-color: #dddddd;
+        }
+
+        .register-message {
+            color: #999999;
+            cursor: pointer;
+            transition: text-decoration 0.2s ease-in-out;
+        }
+
+        .register-message:hover {
+            text-decoration: underline;
+        }
+
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+
+        .popup {
+          background-color: #ffffff;
+          padding: 20px;
+          border-radius: 5px;
+          max-width: 400px;
+          text-align: center;
+        }
+
+        .popup h2 {
+          margin-top: 0;
+        }
+
+        .error-message {
+          color: #ff0000;
+          margin-bottom: 10px;
+        }
+
+    </style>
+  <script>
+   function mostrarLogin() {
+      window.location.href = "/Application/LoginForm";
+    }
+
+    function mostrarMensajeError(mensaje) {
+      var overlay = document.createElement('div');
+      overlay.classList.add('overlay');
+
+      var popup = document.createElement('div');
+      popup.classList.add('popup');
+
+      var heading = document.createElement('h2');
+      heading.textContent = mensaje;
+      popup.appendChild(heading);
+
+      overlay.appendChild(popup);
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', function() {
+        overlay.remove();
+      });
+    }
+
+    function validarFormulario() {
+      var nombreUsuario = document.getElementsByName('nombre')[0].value;
+      var contrasena = document.getElementsByName('password')[0].value;
+      var confirmarContrasena = document.getElementsByName('confirmarPassword')[0].value;
+
+      if (nombreUsuario === '') {
+        mostrarMensajeError('Por favor, ingresa un nombre de usuario');
+        return false;
+      } else if (contrasena === '') {
+        mostrarMensajeError('Por favor, ingresa una contraseña');
+        return false;
+      } else if (contrasena !== confirmarContrasena) {
+        mostrarMensajeError('Las contraseñas no coinciden');
+        return false;
+      }
+
+      return true;
+    }
+
+  </script>
+</head>
+<body>
+<div id="register">
+  <a href="/Inici"><img src="@{'/public/images/Icono.webp'}" class="logo" alt="Logo Rincón Culinario"></a>
+  <h1>Rincón Culinario - Registrarse</h1>
+  #{form @registro(), id:'formRegistro', method:'post', onsubmit:'return validarFormulario()'}
+  <p class="field">
+    <label>Nombre de usuario:</label>
+    <input type="text" name="nombre" size="19" value="${flash.username}" />
+  </p>
+  #{if (missatgeError != null && !missatgeError.isEmpty())}
+  <p class="error-message">
+    ${missatgeError}
+  </p>
+  #{/if}
+  <p class="field">
+    <label>Contraseña:</label>
+    <input type="password" name="password" size="19"/>
+  </p>
+  <p class="field">
+    <label>Confirmar contraseña:</label>
+    <input type="password" name="confirmarPassyword" size="19"/>
+  </p>
+  <p class="buttons">
+    <input type="submit" value="Registrarse" />
+  </p>
+  #{/form}
+  <div class="separator"></div>
+  <p class="register-message" onclick="mostrarLogin()">
+    ¿Ya tienes una cuenta? Inicia sesión
+  </p>
+</div>
+</body>
+</html>
