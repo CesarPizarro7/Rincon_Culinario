@@ -1,0 +1,57 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       Application.index
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Inici
+GET      /Inici                     		Application.IniciForm
+POST     /IniciFormLogged                     	Application.IniciFormLogged
+GET      /IniciFormLogged                     	Application.IniciFormLogged
+
+GET      /TancaSessio              		Application.TancaSessio
+POST	 /delete				Application.delete
+POST	 /BorrarReceta				Application.BorrarReceta
+
+# Login
+GET      /LoginForm                     		Application.LoginForm
+POST     /Login                     		Application.Login
+
+# Registro
+GET      /RegistreForm                          Application.RegistreForm
+POST     /Registro                              Application.Registro
+
+# Sobre Nosotoros
+GET      /SobreMi                     		Application.SobreMi
+POST     /SobreMiLogged                     	Application.SobreMiLogged
+
+# Receta
+POST     /RecetaForm                     	Application.RecetaForm
+GET      /RecetaForm                     	Application.RecetaForm
+
+POST 	 /GuardarComentario			Application.GuardarComentario
+POST 	 /BorrarComentario			Application.BorrarComentario
+
+
+# Categorias
+POST     /RecetasPorCategoriaForm               Application.RecetasPorCategoriaForm
+POST     /RecetasPorCategoriaNotLoggedForm      Application.RecetasPorCategoriaNotLoggedForm
+
+# RecetasFaciles
+POST     /RecetasFacilesForm               	Application.RecetasFacilesForm
+GET      /RecetasFacilesNotLoggedForm      	Application.RecetasFacilesNotLoggedForm
+
+# MejorValoradas
+POST	 /MejorValoradas			Application.MejorValoradas
+
+
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}
